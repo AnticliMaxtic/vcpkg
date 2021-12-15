@@ -1,6 +1,6 @@
 {
   "name": "sdbus-cpp",
-  "version": "0.9.0",
+  "version": "1.0.0",
   "description": "sdbus-c++ is a high-level C++ D-Bus library for Linux designed to provide expressive, easy-to-use API in modern C++.",
   "homepage": "https://github.com/Kistler-Group/sdbus-cpp",
   "dependencies": [
@@ -10,6 +10,10 @@
     },
     {
       "name": "vcpkg-cmake-config",
+      "host": true
+    },
+    {
+      "name": "libsystemd",
       "host": true
     }
   ]
