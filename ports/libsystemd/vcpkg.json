@@ -1,0 +1,20 @@
+{
+  "name": "libsystemd",
+  "version": "249.7",
+  "description": "systemd is a suite of basic building blocks for a Linux system.",
+  "homepage": "https://github.com/systemd/systemd-stable",
+  "dependencies": [
+    {
+      "name": "tool-meson",
+      "host": true
+    },
+    {
+      "name": "gperf",
+      "host": true
+    },
+    {
+      "name": "m4",
+      "host": true
+    }
+  ]
+}
