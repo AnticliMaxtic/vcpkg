@@ -280,6 +280,7 @@ __pycache__/
 ############################################################
 
 .vscode/
+.devcontainer/
 *.code-workspace
 /buildtrees/
 /build*/
@@ -287,6 +288,8 @@ __pycache__/
 /installed*/
 /packages/
 /scripts/buildsystems/tmp/
+config
+vcpkg.path.txt
 #ignore custom triplets
 /triplets/*
 #add vcpkg-designed triplets back in
