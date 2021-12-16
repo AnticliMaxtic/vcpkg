@@ -5,13 +5,13 @@ set(SHA512
 # cmake-format: off
 vcpkg_download_distfile(ARCHIVE
     URLS "https://github.com/systemd/systemd-stable/archive/v${VERSION}.tar.gz"
-    FILENAME "libsystemd-v${VERSION}-src.tar.bz2"
+    FILENAME "v${VERSION}-src.tar.bz2"
     SHA512 4daf8570621fdcda5c94d982908c64eddfeef989005f4fd79a10f199dbc6f366354177bb59dff34bcb14764fb4423a870ffabac1163849ec53592e29760105fc
 )
 vcpkg_extract_source_archive_ex(
     OUT_SOURCE_PATH SOURCE_PATH
     ARCHIVE ${ARCHIVE}
-    PATCHES "0001-missing_syscalls.py-replace-unicode-with-ascii.patch"
+    PATCHES "0001-missing_syscalls.py-replace-unicode-with-ascii.patch" "0001-convert-libsystemd.pc.in-to-cmake-replace-format.patch"
 )
 # cmake-format: on
 
@@ -136,34 +136,54 @@ else()
 endif()
 # vcpkg_install_meson() vcpkg_fixup_pkgconfig() vcpkg_copy_pdbs()
 
+# Install
+if(NOT VCPKG_BUILD_TYPE OR VCPKG_BUILD_TYPE STREQUAL "debug")
+  set(_buildType "dbg")
+elseif(NOT VCPKG_BUILD_TYPE OR VCPKG_BUILD_TYPE STREQUAL "release")
+  set(_buildType "rel")
+endif()
+if(VCPKG_LIBRARY_LINKAGE STREQUAL dynamic)
+  set(_libExtension "so.*")
+else()
+  set(_libExtension "a")
+endif()
+
+##  Include files
 file(
   INSTALL ${SOURCE_PATH}/src/systemd
-  DESTINATION ${CURRENT_INSTALLED_DIR}/include
+  DESTINATION ${CURRENT_PACKAGES_DIR}/include
   PATTERN "*.h")
+file(INSTALL ${CURRENT_BUILDTREES_DIR}/${TARGET_TRIPLET}-${_buildType}/version.h
+     DESTINATION ${CURRENT_PACKAGES_DIR}/include)
 
-if(VCPKG_LIBRARY_LINKAGE STREQUAL dynamic)
-  file(
-    INSTALL ${CURRENT_PACKAGES_DIR}
-    DESTINATION ${CURRENT_INSTALLED_DIR}/lib
-    PATTERN "libsystemd.so.*")
-else()
-  file(
-    INSTALL ${CURRENT_PACKAGES_DIR}
-    DESTINATION ${CURRENT_INSTALLED_DIR}/lib
-    PATTERN "libsystemd.a")
-endif()
+## librarys
+file(
+  INSTALL ${CURRENT_BUILDTREES_DIR}/${TARGET_TRIPLET}-${_buildType}/libsystemd.${_libExtension}
+  DESTINATION ${CURRENT_PACKAGES_DIR}/lib
+  FOLLOW_SYMLINK_CHAIN
+  )
+
+## helper files
+set(PREFIX ${CURRENT_INSTALLED_DIR})
+set(ROOTLIBDIR ${CURRENT_INSTALLED_DIR}/lib)
+set(INCLUDE_DIR ${CURRENT_INSTALLED_DIR}/include)
+set(PROJECT_URL "https://www.freedesktop.org/wiki/Software/systemd")
+set(PROJECT_VERSION ${VERSION})
+configure_file(${SOURCE_PATH}/src/libsystemd/libsystemd.pc.in
+               ${CURRENT_PACKAGES_DIR}/lib/pkgconfig/libsystemd.pc @ONLY)
+unset(PROJECT_VERSION)
+unset(PROJECT_URL)
+unset(INCLUDE_DIR)
+unset(ROOTLIBDIR)
+unset(PREFIX)
 
 # Handle copyright
 file(
   INSTALL ${SOURCE_PATH}/LICENSE.GPL2
   DESTINATION ${CURRENT_PACKAGES_DIR}/share/${PORT}
   RENAME copyright)
-file(
-    COPY
-        ${SOURCE_PATH}/LICENSE.GPL2
-        ${SOURCE_PATH}/LICENSE.LGPL2.1
-    DESTINATION ${CURRENT_PACKAGES_DIR}/share/${PORT}
-)
+file(COPY ${SOURCE_PATH}/LICENSE.GPL2 ${SOURCE_PATH}/LICENSE.LGPL2.1
+     DESTINATION ${CURRENT_PACKAGES_DIR}/share/${PORT})
 
 # Allow empty include directory
 set(VCPKG_POLICY_EMPTY_INCLUDE_FOLDER enabled)
