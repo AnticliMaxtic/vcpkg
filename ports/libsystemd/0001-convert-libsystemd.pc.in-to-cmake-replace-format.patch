@@ -1,0 +1,37 @@
+From ffa7236acd7561022a4ca925769b9762fbeee793 Mon Sep 17 00:00:00 2001
+From: Max Christy <tchristy001@outlook.com>
+Date: Thu, 16 Dec 2021 15:03:50 +0000
+Subject: [PATCH] convert libsystemd.pc.in to cmake replace format
+
+---
+ src/libsystemd/libsystemd.pc.in | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/src/libsystemd/libsystemd.pc.in b/src/libsystemd/libsystemd.pc.in
+index da6e4e667e..e0aeafcc12 100644
+--- a/src/libsystemd/libsystemd.pc.in
++++ b/src/libsystemd/libsystemd.pc.in
+@@ -7,14 +7,14 @@
+ #  the Free Software Foundation; either version 2.1 of the License, or
+ #  (at your option) any later version.
+ 
+-prefix={{PREFIX}}
+-exec_prefix={{PREFIX}}
+-libdir={{ROOTLIBDIR}}
+-includedir={{INCLUDE_DIR}}
++prefix=@PREFIX@
++exec_prefix=@PREFIX@
++libdir=@ROOTLIBDIR@
++includedir=@INCLUDE_DIR@
+ 
+ Name: systemd
+ Description: systemd Library
+-URL: {{PROJECT_URL}}
+-Version: {{PROJECT_VERSION}}
++URL: @PROJECT_URL@
++Version: @PROJECT_VERSION@
+ Libs: -L${libdir} -lsystemd
+ Cflags: -I${includedir}
+-- 
+2.25.1
+
