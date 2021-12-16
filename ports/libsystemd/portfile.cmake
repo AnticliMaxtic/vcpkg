@@ -148,7 +148,7 @@ else()
   set(_libExtension "a")
 endif()
 
-##  Include files
+# Include files
 file(
   INSTALL ${SOURCE_PATH}/src/systemd
   DESTINATION ${CURRENT_PACKAGES_DIR}/include
@@ -156,14 +156,14 @@ file(
 file(INSTALL ${CURRENT_BUILDTREES_DIR}/${TARGET_TRIPLET}-${_buildType}/version.h
      DESTINATION ${CURRENT_PACKAGES_DIR}/include)
 
-## librarys
+# librarys
 file(
-  INSTALL ${CURRENT_BUILDTREES_DIR}/${TARGET_TRIPLET}-${_buildType}/libsystemd.${_libExtension}
+  INSTALL
+  ${CURRENT_BUILDTREES_DIR}/${TARGET_TRIPLET}-${_buildType}/libsystemd.${_libExtension}
   DESTINATION ${CURRENT_PACKAGES_DIR}/lib
-  FOLLOW_SYMLINK_CHAIN
-  )
+  FOLLOW_SYMLINK_CHAIN)
 
-## helper files
+# helper files
 set(PREFIX ${CURRENT_INSTALLED_DIR})
 set(ROOTLIBDIR ${CURRENT_INSTALLED_DIR}/lib)
 set(INCLUDE_DIR ${CURRENT_INSTALLED_DIR}/include)
@@ -171,6 +171,9 @@ set(PROJECT_URL "https://www.freedesktop.org/wiki/Software/systemd")
 set(PROJECT_VERSION ${VERSION})
 configure_file(${SOURCE_PATH}/src/libsystemd/libsystemd.pc.in
                ${CURRENT_PACKAGES_DIR}/lib/pkgconfig/libsystemd.pc @ONLY)
+configure_file(${SOURCE_PATH}/src/libsystemd/libsystemd.pc.in
+               ${CURRENT_PACKAGES_DIR}/debug/lib/pkgconfig/libsystemd.pc @ONLY)
+vcpkg_fixup_pkgconfig()
 unset(PROJECT_VERSION)
 unset(PROJECT_URL)
 unset(INCLUDE_DIR)
