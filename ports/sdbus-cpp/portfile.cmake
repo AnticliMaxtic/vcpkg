@@ -18,7 +18,7 @@ vcpkg_check_features(OUT_FEATURE_OPTIONS FEATURE_OPTIONS
 vcpkg_cmake_configure(
     SOURCE_PATH "${SOURCE_PATH}"
     OPTIONS ${FEATURE_OPTIONS}
-        -DBUILD_LIBSYSTEMD=OFF
+        -DBUILD_LIBSYSTEMD=ON
 )
 
 vcpkg_cmake_install()
