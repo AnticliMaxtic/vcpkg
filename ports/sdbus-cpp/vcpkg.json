@@ -8,6 +8,7 @@
   "dependencies": [
     "dbus",
     "libsystemd",
+    "lz4",
     {
       "name": "vcpkg-cmake",
       "host": true
